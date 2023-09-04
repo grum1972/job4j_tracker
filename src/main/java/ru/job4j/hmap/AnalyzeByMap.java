@@ -28,7 +28,7 @@ public class AnalyzeByMap {
     }
 
     public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
-        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+        Map<String, Integer> map = new LinkedHashMap<>();
         for (Pupil pupil : pupils) {
             for (Subject subject : pupil.subjects()) {
                 map.merge(subject.name(), subject.score(), (oldValue, newValue) -> oldValue + newValue);
@@ -55,7 +55,7 @@ public class AnalyzeByMap {
     }
 
     public static Label bestSubject(List<Pupil> pupils) {
-        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+        Map<String, Integer> map = new LinkedHashMap<>();
         for (Pupil pupil : pupils) {
             for (Subject subject : pupil.subjects()) {
                 map.merge(subject.name(), subject.score(), (oldValue, newValue) -> oldValue + newValue);
