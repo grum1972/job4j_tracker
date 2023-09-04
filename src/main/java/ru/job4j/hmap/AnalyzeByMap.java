@@ -31,26 +31,12 @@ public class AnalyzeByMap {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
         for (Pupil pupil : pupils) {
             for (Subject subject : pupil.subjects()) {
-                if (map.containsKey(subject.name())) {
-                    int oldValue = map.get(subject.name());
-                    map.put(subject.name(), oldValue + subject.score());
-                } else {
-                    map.put(subject.name(), subject.score());
-                }
+                map.merge(subject.name(), subject.score(), (oldValue, newValue) -> oldValue + newValue);
             }
         }
         List<Label> labels = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            int count = 0;
-            for (Pupil pupil : pupils) {
-                for (Subject subject : pupil.subjects()) {
-                    if (subject.name().equals(entry.getKey())) {
-                        count++;
-                    }
-                }
-            }
-            double avgScore = entry.getValue() / (double) count;
-            labels.add(new Label(entry.getKey(), avgScore));
+        for (String key : map.keySet()) {
+            labels.add(new Label(key, map.get(key) / (double) pupils.size()));
         }
         return labels;
     }
@@ -72,17 +58,12 @@ public class AnalyzeByMap {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
         for (Pupil pupil : pupils) {
             for (Subject subject : pupil.subjects()) {
-                if (map.containsKey(subject.name())) {
-                    int oldValue = map.get(subject.name());
-                    map.put(subject.name(), oldValue + subject.score());
-                } else {
-                    map.put(subject.name(), subject.score());
-                }
+                map.merge(subject.name(), subject.score(), (oldValue, newValue) -> oldValue + newValue);
             }
         }
         List<Label> labels = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            labels.add(new Label(entry.getKey(), entry.getValue()));
+        for (String key : map.keySet()) {
+            labels.add(new Label(key, map.get(key)));
         }
         Collections.sort(labels);
         return labels.get(labels.size() - 1);
