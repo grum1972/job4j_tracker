@@ -1,11 +1,15 @@
 package ru.job4j.tracker;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class StartUITest {
     @Test
@@ -126,7 +130,7 @@ class StartUITest {
     public void whenInvalidExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
-                new String[] {"1", "0"}
+                new String[]{"1", "0"}
         );
         Tracker tracker = new Tracker();
         List<UserAction> actions = new ArrayList<>();
@@ -141,5 +145,31 @@ class StartUITest {
                         + "Menu:" + ln
                         + "0. Exit Program" + ln
         );
+    }
+
+    @Test
+    public void sortAscending() {
+        Item first = new Item("AAA");
+        Item second = new Item("BBB");
+        Item third = new Item("CCC");
+        List<Item> test = new ArrayList<>();
+        test.add(first);
+        test.add(third);
+        test.add(second);
+        test.sort(new ItemAscByName());
+        assertThat(test).containsExactly(first, second, third);
+    }
+
+    @Test
+    public void sortDescending() {
+        Item first = new Item("AAA");
+        Item second = new Item("BBB");
+        Item third = new Item("CCC");
+        List<Item> test = new ArrayList<>();
+        test.add(first);
+        test.add(third);
+        test.add(second);
+        test.sort(new ItemDescByName());
+        assertThat(test).containsExactly(third, second, first);
     }
 }
