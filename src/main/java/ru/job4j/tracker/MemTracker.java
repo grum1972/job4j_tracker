@@ -1,9 +1,48 @@
 package ru.job4j.tracker;
 
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
-public class Tracker {
+public class MemTracker implements Store {
+
+    private Connection connection;
+
+    public MemTracker() {
+        init();
+    }
+
+    public MemTracker(Connection connection) {
+        this.connection = connection;
+    }
+
+    private void init() {
+        try (InputStream input = MemTracker.class.getClassLoader()
+                .getResourceAsStream("app.properties")) {
+            Properties config = new Properties();
+            config.load(input);
+            Class.forName(config.getProperty("driver-class-name"));
+            connection = DriverManager.getConnection(
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public void close() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
     private final List<Item> items = new ArrayList<>();
     private int ids = 1;
 
@@ -53,13 +92,11 @@ public class Tracker {
         return false;
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         int index = indexOf(id);
         if (index != -1) {
             items.remove(index);
-            return true;
         }
-        return false;
     }
 
 }
