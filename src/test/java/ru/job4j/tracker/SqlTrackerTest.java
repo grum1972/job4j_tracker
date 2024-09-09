@@ -89,4 +89,17 @@ public class SqlTrackerTest {
         tracker.add(item1);
         assertThat(tracker.findById(item.getId())).isEqualTo(item);
     }
+
+    @Test
+    public void whenDeleteItemOnlyOneRecordRemove() {
+        SqlTracker tracker = new SqlTracker(connection);
+        Item item = new Item("item");
+        tracker.add(item);
+        Item item1 = new Item("item1");
+        tracker.add(item1);
+        Item item2 = new Item("item2");
+        tracker.add(item2);
+        tracker.delete(item1.getId());
+        assertThat(tracker.findAll().size()).isEqualTo(2);
+    }
 }
