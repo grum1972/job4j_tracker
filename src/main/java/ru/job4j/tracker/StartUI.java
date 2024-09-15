@@ -42,6 +42,8 @@ public class StartUI {
             actions.add(new DeleteAction(output));
             actions.add(new FindItemByIdAction(output));
             actions.add(new FindItemByNameAction(output));
+            actions.add(new CreateManyItems(output));
+            actions.add(new DeleteAllItems(output));
             actions.add(new ExitAction());
             new StartUI(output).init(input, tracker, actions);
         } catch (Exception e) {
